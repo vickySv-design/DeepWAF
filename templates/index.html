@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepWAF - Final Year Project</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        .navbar {
+            background: #2c3e50;
+            padding: 1rem 2rem;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+        }
+        .navbar .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 2rem;
+        }
+        .hero {
+            background: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .hero h1 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        .hero .subtitle {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+        .hero .institution {
+            font-size: 1rem;
+            color: #888;
+            margin-bottom: 2rem;
+        }
+        .hero .buttons {
+            margin-top: 2rem;
+        }
+        .hero .buttons a {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            margin: 0 0.5rem;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        .section {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+        .section h2 {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-weight: 600;
+        }
+        .section-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        .section-content p {
+            color: #555;
+            margin-bottom: 1rem;
+        }
+        .workflow {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .workflow-step {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        .workflow-step h3 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+        .workflow-step p {
+            color: #666;
+            margin: 0;
+        }
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        .spec-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .spec-card h3 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .spec-card p {
+            color: #666;
+            margin: 0;
+        }
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        .metric-box {
+            background: white;
+            padding: 2rem;
+            text-align: center;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #3498db;
+        }
+        .metric-label {
+            color: #666;
+            margin-top: 0.5rem;
+        }
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+        footer p {
+            margin: 0.5rem 0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/" class="logo">DeepWAF</a>
+        <div class="nav-links">
+            <a href="/home">Analysis Console</a>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/model">Model</a>
+            <a href="/about">About</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>DeepWAF</h1>
+        <p class="subtitle">Character-Level CNN for Web Application Security</p>
+        <p class="institution">A hybrid detection system combining signature-based filtering with deep learning</p>
+        <div class="buttons">
+            <a href="/home">Test System</a>
+            <a href="/dashboard">View Analytics</a>
+            <a href="/about">Learn More</a>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2>System Architecture</h2>
+        <div class="specs-grid">
+            <div class="spec-card">
+                <h3>Reverse Proxy Mode</h3>
+                <p>Automatically intercepts and filters all incoming HTTP traffic</p>
+            </div>
+            <div class="spec-card">
+                <h3>Signature Detection</h3>
+                <p>Fast regex-based pattern matching for known attack signatures</p>
+            </div>
+            <div class="spec-card">
+                <h3>CNN Analysis</h3>
+                <p>Character-level deep learning for obfuscated attack detection</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2>Model Performance</h2>
+        <div class="metrics">
+            <div class="metric-box">
+                <div class="metric-value">98.2%</div>
+                <div class="metric-label">Detection Accuracy</div>
+            </div>
+            <div class="metric-box">
+                <div class="metric-value">160K</div>
+                <div class="metric-label">Model Parameters</div>
+            </div>
+            <div class="metric-box">
+                <div class="metric-value">~10ms</div>
+                <div class="metric-label">CNN Latency</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2>Core Features</h2>
+        <div class="specs-grid">
+            <div class="spec-card">
+                <h3>Hybrid Detection</h3>
+                <p>Combines signature-based and CNN-based threat detection</p>
+            </div>
+            <div class="spec-card">
+                <h3>Automatic Learning</h3>
+                <p>No manual feature engineering required for pattern recognition</p>
+            </div>
+            <div class="spec-card">
+                <h3>Real-Time Analysis</h3>
+                <p>Low-latency request processing with immediate threat response</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p><strong>DeepWAF</strong> - Character-Level CNN Web Application Firewall</p>
+        <p>Final Year Project | Computer Science Engineering</p>
+        <p>Sree Sakthi Engineering College, Tamil Nadu, India</p>
+    </footer>
+</body>
+</html>

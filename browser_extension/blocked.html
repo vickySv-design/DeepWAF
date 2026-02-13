@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DeepWAF - Threat Blocked</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      background: white;
+      padding: 50px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      max-width: 700px;
+      text-align: center;
+    }
+    .logo {
+      font-size: 60px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      color: #e74c3c;
+      margin: 0 0 10px 0;
+      font-size: 2.5rem;
+    }
+    .subtitle {
+      color: #666;
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+    }
+    .threat-box {
+      background: #fff3cd;
+      border-left: 5px solid #ffc107;
+      padding: 20px;
+      margin: 20px 0;
+      text-align: left;
+      border-radius: 5px;
+    }
+    .threat-box strong {
+      color: #856404;
+      display: block;
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+    .url-box {
+      background: #f8d7da;
+      padding: 15px;
+      border-radius: 5px;
+      word-break: break-all;
+      margin: 20px 0;
+      border: 2px solid #e74c3c;
+      font-family: 'Courier New', monospace;
+      color: #721c24;
+    }
+    .details {
+      background: #e3f2fd;
+      padding: 20px;
+      border-radius: 5px;
+      margin: 20px 0;
+      text-align: left;
+    }
+    .details-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #ddd;
+    }
+    .details-row:last-child {
+      border-bottom: none;
+    }
+    .label {
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    .value {
+      color: #666;
+    }
+    .footer {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 2px solid #eee;
+      color: #999;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">&#128737;&#65039;</div>
+    <h1>DeepWAF</h1>
+    <p class="subtitle">Threat Blocked Successfully</p>
+    
+    <div class="threat-box">
+      <strong>&#9888;&#65039; Security Alert</strong>
+      This URL contains malicious patterns and has been blocked to protect your system.
+    </div>
+    
+    <div class="url-box" id="blocked-url"></div>
+    
+    <div class="details">
+      <div class="details-row">
+        <span class="label">Detection System:</span>
+        <span class="value" id="detection-method">Character-Level CNN + Signature Analysis</span>
+      </div>
+      <div class="details-row">
+        <span class="label">Threat Category:</span>
+        <span class="value" id="threat-type">SQL Injection / XSS / Obfuscated Attack</span>
+      </div>
+      <div class="details-row">
+        <span class="label">Action Taken:</span>
+        <span class="value">Request Blocked</span>
+      </div>
+      <div class="details-row">
+        <span class="label">Timestamp:</span>
+        <span class="value" id="timestamp"></span>
+      </div>
+      <div class="details-row">
+        <span class="label">Protection Level:</span>
+        <span class="value">Level-2 Reverse Proxy WAF</span>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <strong>DeepWAF</strong> - Character-Level CNN Web Application Firewall<br>
+      Final Year Project | Sree Sakthi Engineering College<br>
+      Developed by: Smiruthi Succhitha, Dhayanandhan US
+    </div>
+  </div>
+  
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const url = params.get('url') || 'Unknown URL';
+    const method = params.get('method') || 'Signature + CNN';
+    const type = params.get('type') || 'Malicious Pattern';
+    
+    document.getElementById('blocked-url').textContent = url;
+    document.getElementById('detection-method').textContent = method;
+    document.getElementById('threat-type').textContent = type;
+    document.getElementById('timestamp').textContent = new Date().toLocaleString();
+  </script>
+</body>
+</html>

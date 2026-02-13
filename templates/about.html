@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - DeepWAF</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        .navbar {
+            background: #2c3e50;
+            padding: 1rem 2rem;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+        }
+        .navbar .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 2rem;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+        .header {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .header h1 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
+        }
+        .header p {
+            color: #666;
+            margin: 0.5rem 0;
+        }
+        .section {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 0.5rem;
+        }
+        .section p {
+            color: #555;
+            margin-bottom: 1rem;
+        }
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .team-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        .team-card h3 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+        .team-card p {
+            color: #666;
+            margin: 0.25rem 0;
+            font-size: 0.95rem;
+        }
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .metric-box {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .metric-box strong {
+            display: block;
+            color: #3498db;
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+        .metric-box span {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/" class="logo">DeepWAF</a>
+        <div class="nav-links">
+            <a href="/home">Analysis Console</a>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/model">Model</a>
+            <a href="/about">About</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>DeepWAF: Enhancing Web Application Security through Character-Level Convolutional Neural Networks</h1>
+            <p><strong>Final Year Project</strong></p>
+            <p>Department of Computer Science Engineering</p>
+            <p>Sree Sakthi Engineering College, Tamil Nadu, India</p>
+        </div>
+
+        <div class="section">
+            <h2>Project Team</h2>
+            <div class="team-grid">
+                <div class="team-card">
+                    <h3>Smiruthi Succhitha</h3>
+                    <p>Student Developer</p>
+                    <p>Department of CSE</p>
+                </div>
+                <div class="team-card">
+                    <h3>Dhayanandhan US</h3>
+                    <p>Student Developer</p>
+                    <p>Department of CSE</p>
+                </div>
+                <div class="team-card">
+                    <h3>Keerthipriya S</h3>
+                    <p>Project Guide</p>
+                    <p>Assistant Professor, CSE</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Project Overview</h2>
+            <p>
+                DeepWAF integrates traditional signature-based filtering with a Character-Level 1D Convolutional Neural Network 
+                to automatically detect SQL Injection, Cross-Site Scripting, and obfuscated web attacks in real time. The system 
+                intercepts incoming HTTP requests through a Flask-based reverse proxy, performs fast regex-based signature checks 
+                to block known attacks, and forwards suspicious or obfuscated payloads to the CNN model for behavioral analysis.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>System Architecture</h2>
+            <p>
+                <strong>Detection Pipeline:</strong> HTTP requests are first validated against signature patterns. Clean requests 
+                are allowed immediately, known attacks are blocked, and suspicious requests undergo CNN analysis.
+            </p>
+            <p>
+                <strong>Character-Level Processing:</strong> Each request is converted into a fixed-length character sequence using 
+                ASCII encoding and padding, then passed through an embedding layer followed by stacked Conv1D and pooling layers 
+                that automatically learn malicious patterns without manual feature engineering.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>Methodology</h2>
+            <p>
+                <strong>Preprocessing:</strong> HTTP requests are normalized and converted to character sequences (500 characters max).
+            </p>
+            <p>
+                <strong>Character-Level Encoding:</strong> Each character is mapped to its ASCII value, creating a numerical sequence 
+                suitable for CNN input.
+            </p>
+            <p>
+                <strong>CNN-Based Feature Extraction:</strong> The model uses embedding layers (256→128 dimensions), two Conv1D layers 
+                (128 and 64 filters), max pooling, and dense layers for classification.
+            </p>
+            <p>
+                <strong>Training:</strong> The model is trained using the CSIC 2010 HTTP dataset with binary cross-entropy loss and 
+                Adam optimizer over 20 epochs.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>CNN Model Design</h2>
+            <p>
+                <strong>Architecture:</strong> Character-Level 1D Convolutional Neural Network
+            </p>
+            <p>
+                <strong>Framework:</strong> PyTorch
+            </p>
+            <p>
+                <strong>Total Parameters:</strong> 160,065
+            </p>
+            <p>
+                <strong>Layers:</strong> Embedding (128-dim) → Conv1D (128 filters) → MaxPool → Conv1D (64 filters) → 
+                GlobalMaxPool → Dense (64 units) → Dropout (0.5) → Output (Sigmoid)
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>Performance Evaluation</h2>
+            <div class="metrics-grid">
+                <div class="metric-box">
+                    <strong>98.7%</strong>
+                    <span>Accuracy</span>
+                </div>
+                <div class="metric-box">
+                    <strong>98.5%</strong>
+                    <span>Precision</span>
+                </div>
+                <div class="metric-box">
+                    <strong>99.1%</strong>
+                    <span>Recall</span>
+                </div>
+                <div class="metric-box">
+                    <strong>98.8%</strong>
+                    <span>F1-Score</span>
+                </div>
+            </div>
+            <p style="margin-top: 1rem;">
+                The model achieves strong performance across all metrics, demonstrating effective detection of both known 
+                and obfuscated web attacks while maintaining low false positive rates.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>Key Objectives</h2>
+            <p>• Develop a hybrid detection system combining signature-based and deep learning approaches</p>
+            <p>• Implement character-level CNN for automatic pattern learning without manual feature engineering</p>
+            <p>• Achieve real-time detection with minimal latency (~10ms for CNN analysis)</p>
+            <p>• Provide comprehensive logging and analytics for security monitoring</p>
+            <p>• Create a deployable web application for practical demonstration</p>
+        </div>
+
+        <div class="section">
+            <h2>Dataset</h2>
+            <p>
+                <strong>CSIC 2010 HTTP Dataset:</strong> Industry-standard dataset containing normal and anomalous HTTP requests 
+                for web attack detection research.
+            </p>
+            <p>
+                <strong>Training Data:</strong> 1,860 samples (960 malicious, 900 benign) including SQL injection, XSS, 
+                and obfuscated attack patterns.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>Conclusion</h2>
+            <p>
+                DeepWAF demonstrates the effectiveness of Character-Level CNNs for web application security. By automatically 
+                learning attack patterns from raw character sequences, the system achieves high detection accuracy while maintaining 
+                low latency. The hybrid approach combining signature-based and CNN-based detection provides robust protection against 
+                both known and novel attacks, making it suitable for real-world deployment.
+            </p>
+        </div>
+    </div>
+
+    <footer>
+        <p>DeepWAF - Character-Level CNN Web Application Firewall</p>
+        <p>Final Year Project | Computer Science Engineering | 2026</p>
+        <p>Sree Sakthi Engineering College, Tamil Nadu, India</p>
+    </footer>
+</body>
+</html>

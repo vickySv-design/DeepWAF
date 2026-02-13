@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Management - DeepWAF</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #2c3e50;
+        }
+        .navbar {
+            background: #2c3e50;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .navbar-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar h1 {
+            color: white;
+            font-size: 1.5rem;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 2rem;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover {
+            color: #3498db;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        .section {
+            background: white;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #3498db;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .form-group input[type="file"],
+        .form-group input[type="number"],
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        .form-group textarea {
+            min-height: 120px;
+            font-family: 'Courier New', monospace;
+            resize: vertical;
+        }
+        .btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #229954;
+        }
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+        .result-box {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 4px;
+            display: none;
+        }
+        .result-box.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .result-box.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .result-box.info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 1rem;
+            display: none;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #3498db;
+            width: 0%;
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .info-card {
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 4px;
+            border-left: 4px solid #3498db;
+        }
+        .info-card h3 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+        .info-card p {
+            color: #7f8c8d;
+        }
+        .log-output {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 1rem;
+            display: none;
+        }
+        .log-output .log-line {
+            margin-bottom: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <h1>DeepWAF - Model Management</h1>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/home">Console</a>
+                <a href="/dashboard">Dashboard</a>
+                <a href="/model">Model</a>
+                <a href="/about">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Upload Training Data -->
+        <div class="section">
+            <h2>Upload Training Data</h2>
+            <form id="uploadForm" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label>Upload CSV File (columns: request, label)</label>
+                    <input type="file" id="dataFile" accept=".csv" required>
+                    <small style="color: #7f8c8d; display: block; margin-top: 0.5rem;">
+                        CSV format: First column = HTTP request string, Second column = label (0=benign, 1=malicious)
+                    </small>
+                </div>
+                <button type="submit" class="btn btn-primary">Upload Data</button>
+                <div id="uploadResult" class="result-box"></div>
+            </form>
+        </div>
+
+        <!-- Manual Data Entry -->
+        <div class="section">
+            <h2>Add Training Samples</h2>
+            <form id="manualForm">
+                <div class="form-group">
+                    <label>Request String</label>
+                    <textarea id="manualRequest" placeholder="Enter HTTP request string..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Label</label>
+                    <select id="manualLabel" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px;">
+                        <option value="0">Benign (0)</option>
+                        <option value="1">Malicious (1)</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-success">Add Sample</button>
+                <div id="manualResult" class="result-box"></div>
+            </form>
+        </div>
+
+        <!-- Train Model -->
+        <div class="section">
+            <h2>Train CNN Model</h2>
+            <form id="trainForm">
+                <div class="grid">
+                    <div class="form-group">
+                        <label>Epochs</label>
+                        <input type="number" id="epochs" value="20" min="1" max="100" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Batch Size</label>
+                        <input type="number" id="batchSize" value="32" min="8" max="128" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Learning Rate</label>
+                        <input type="number" id="learningRate" value="0.001" step="0.0001" min="0.0001" max="0.1" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Start Training</button>
+                <div class="progress-bar" id="trainProgress">
+                    <div class="progress-fill" id="trainProgressFill">0%</div>
+                </div>
+                <div id="trainResult" class="result-box"></div>
+                <div id="trainLog" class="log-output"></div>
+            </form>
+        </div>
+
+        <!-- Test Model -->
+        <div class="section">
+            <h2>Test Model</h2>
+            <form id="testForm">
+                <div class="form-group">
+                    <label>Test Request</label>
+                    <textarea id="testRequest" placeholder="Enter HTTP request to test..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-success">Test Request</button>
+                <div id="testResult" class="result-box"></div>
+            </form>
+        </div>
+
+        <!-- Model Information -->
+        <div class="section">
+            <h2>Current Model Information</h2>
+            <div class="grid">
+                <div class="info-card">
+                    <h3>Model Status</h3>
+                    <p id="modelStatus">Loading...</p>
+                </div>
+                <div class="info-card">
+                    <h3>Training Samples</h3>
+                    <p id="sampleCount">Loading...</p>
+                </div>
+                <div class="info-card">
+                    <h3>Last Trained</h3>
+                    <p id="lastTrained">Loading...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Upload CSV Data
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData();
+            formData.append('file', document.getElementById('dataFile').files[0]);
+            
+            const resultBox = document.getElementById('uploadResult');
+            resultBox.style.display = 'block';
+            resultBox.className = 'result-box info';
+            resultBox.textContent = 'Uploading...';
+
+            try {
+                const response = await fetch('/api/upload_data', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultBox.className = 'result-box success';
+                    resultBox.textContent = `✓ ${data.message}`;
+                    loadModelInfo();
+                } else {
+                    resultBox.className = 'result-box error';
+                    resultBox.textContent = `✗ ${data.error}`;
+                }
+            } catch (error) {
+                resultBox.className = 'result-box error';
+                resultBox.textContent = `✗ Error: ${error.message}`;
+            }
+        });
+
+        // Add Manual Sample
+        document.getElementById('manualForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const request = document.getElementById('manualRequest').value;
+            const label = document.getElementById('manualLabel').value;
+            
+            const resultBox = document.getElementById('manualResult');
+            resultBox.style.display = 'block';
+            resultBox.className = 'result-box info';
+            resultBox.textContent = 'Adding sample...';
+
+            try {
+                const response = await fetch('/api/add_sample', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({request, label: parseInt(label)})
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultBox.className = 'result-box success';
+                    resultBox.textContent = `✓ ${data.message}`;
+                    document.getElementById('manualRequest').value = '';
+                    loadModelInfo();
+                } else {
+                    resultBox.className = 'result-box error';
+                    resultBox.textContent = `✗ ${data.error}`;
+                }
+            } catch (error) {
+                resultBox.className = 'result-box error';
+                resultBox.textContent = `✗ Error: ${error.message}`;
+            }
+        });
+
+        // Train Model
+        document.getElementById('trainForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const epochs = document.getElementById('epochs').value;
+            const batchSize = document.getElementById('batchSize').value;
+            const learningRate = document.getElementById('learningRate').value;
+            
+            const resultBox = document.getElementById('trainResult');
+            const progressBar = document.getElementById('trainProgress');
+            const progressFill = document.getElementById('trainProgressFill');
+            const logOutput = document.getElementById('trainLog');
+            
+            resultBox.style.display = 'block';
+            resultBox.className = 'result-box info';
+            resultBox.textContent = 'Training started...';
+            progressBar.style.display = 'block';
+            logOutput.style.display = 'block';
+            logOutput.innerHTML = '';
+
+            try {
+                const response = await fetch('/api/train_model', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({epochs: parseInt(epochs), batch_size: parseInt(batchSize), learning_rate: parseFloat(learningRate)})
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    progressFill.style.width = '100%';
+                    progressFill.textContent = '100%';
+                    resultBox.className = 'result-box success';
+                    resultBox.innerHTML = `✓ Training Complete<br>Accuracy: ${data.accuracy}%<br>Loss: ${data.loss}`;
+                    logOutput.innerHTML += `<div class="log-line">${data.log}</div>`;
+                    loadModelInfo();
+                } else {
+                    resultBox.className = 'result-box error';
+                    resultBox.textContent = `✗ ${data.error}`;
+                }
+            } catch (error) {
+                resultBox.className = 'result-box error';
+                resultBox.textContent = `✗ Error: ${error.message}`;
+            }
+        });
+
+        // Test Model
+        document.getElementById('testForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const request = document.getElementById('testRequest').value;
+            
+            const resultBox = document.getElementById('testResult');
+            resultBox.style.display = 'block';
+            resultBox.className = 'result-box info';
+            resultBox.textContent = 'Testing...';
+
+            try {
+                const response = await fetch('/api/test_model', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({request})
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    const isMalicious = data.prediction === 1;
+                    resultBox.className = isMalicious ? 'result-box error' : 'result-box success';
+                    resultBox.innerHTML = `
+                        <strong>Prediction:</strong> ${isMalicious ? 'Malicious' : 'Benign'}<br>
+                        <strong>Confidence:</strong> ${(data.confidence * 100).toFixed(2)}%<br>
+                        <strong>Method:</strong> ${data.method}
+                    `;
+                } else {
+                    resultBox.className = 'result-box error';
+                    resultBox.textContent = `✗ ${data.error}`;
+                }
+            } catch (error) {
+                resultBox.className = 'result-box error';
+                resultBox.textContent = `✗ Error: ${error.message}`;
+            }
+        });
+
+        // Load Model Info
+        async function loadModelInfo() {
+            try {
+                const response = await fetch('/api/model_info');
+                const data = await response.json();
+                
+                document.getElementById('modelStatus').textContent = data.status || 'Unknown';
+                document.getElementById('sampleCount').textContent = data.sample_count || '0';
+                document.getElementById('lastTrained').textContent = data.last_trained || 'Never';
+            } catch (error) {
+                console.error('Error loading model info:', error);
+            }
+        }
+
+        // Load on page load
+        loadModelInfo();
+    </script>
+</body>
+</html>

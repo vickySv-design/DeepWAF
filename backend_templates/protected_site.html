@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DeepWAF - Protected Site Demo</title>
+    <base href="/protected/">
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px; 
+            margin: 50px auto; 
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .header { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; 
+            padding: 30px; 
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .header h1 {
+            margin: 0 0 10px 0;
+            font-size: 2rem;
+        }
+        .content { 
+            margin-top: 20px; 
+            padding: 30px; 
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .info { 
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .success {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .test-section h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        .test-links {
+            list-style: none;
+            padding: 0;
+        }
+        .test-links li {
+            padding: 10px;
+            margin: 8px 0;
+            background: white;
+            border-radius: 4px;
+            border-left: 4px solid #27ae60;
+        }
+        .test-links li a {
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        .attack-links {
+            list-style: none;
+            padding: 0;
+        }
+        .attack-links li {
+            padding: 10px;
+            margin: 8px 0;
+            background: white;
+            border-radius: 4px;
+            border-left: 4px solid #e74c3c;
+        }
+        .attack-links li a {
+            text-decoration: none;
+            color: #e74c3c;
+            font-weight: 500;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🛡️ Protected Website Demo</h1>
+        <p>This website is protected by DeepWAF - Character-Level CNN Web Application Firewall</p>
+    </div>
+    
+    <div class="content">
+        <div class="success">
+            <strong>✅ Protection Active</strong><br>
+            All requests are automatically filtered through DeepWAF before reaching this server.
+        </div>
+        
+        <h2>Welcome to the Protected Backend</h2>
+        <p>This is a demonstration web application protected by DeepWAF reverse proxy. The WAF sits between clients and this server, analyzing every request using:</p>
+        <ul>
+            <li><strong>Signature-Based Detection</strong> - Fast regex matching for known attacks (~1ms)</li>
+            <li><strong>Character-Level CNN</strong> - Deep learning for obfuscated attacks (~10ms)</li>
+        </ul>
+        
+        <div class="info">
+            <strong>Current Request Information:</strong><br>
+            Method: <code>{{ method }}</code><br>
+            Path: <code>{{ path }}</code><br>
+            Query: <code>{{ query if query else 'None' }}</code>
+        </div>
+        
+        <div class="test-section">
+            <h3>🟢 Safe Requests <span class="badge badge-success">ALLOWED</span></h3>
+            <p>These requests pass through DeepWAF successfully:</p>
+            <ul class="test-links">
+                <li><a href="/products?id=123">📦 View Product (id=123)</a></li>
+                <li><a href="/search?q=laptop">🔍 Search for "laptop"</a></li>
+                <li><a href="/api/users">👥 API: Get Users</a></li>
+                <li><a href="/about">ℹ️ About Page</a></li>
+            </ul>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔴 Attack Attempts <span class="badge badge-danger">BLOCKED</span></h3>
+            <p>These malicious requests are blocked by DeepWAF (you'll see 403 error):</p>
+            <ul class="attack-links">
+                <li><a href="/search?q=' OR '1'='1">💉 SQL Injection: ' OR '1'='1</a></li>
+                <li><a href="/comment?text=<script>alert(1)</script>">⚠️ XSS Attack: &lt;script&gt;alert(1)&lt;/script&gt;</a></li>
+                <li><a href="/search?q=%27%20OR%20%271%27%3D%271">🔐 Obfuscated SQLi: URL-encoded attack</a></li>
+                <li><a href="/admin?user=admin'--">🚫 SQL Comment Injection: admin'--</a></li>
+            </ul>
+        </div>
+        
+        <div class="info">
+            <strong>💡 How It Works:</strong><br>
+            1. Client sends request → 2. DeepWAF intercepts → 3. Signature check → 4. CNN analysis (if needed) → 5. Block or Forward → 6. Log decision
+        </div>
+        
+        <p style="text-align: center; margin-top: 30px; color: #7f8c8d;">
+            <small>Protected by DeepWAF | Final Year Project | Sree Sakthi Engineering College</small>
+        </p>
+    </div>
+</body>
+</html>

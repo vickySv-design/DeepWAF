@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepWAF - Analysis Console</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background: #2c3e50;
+            padding: 1rem 2rem;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+        }
+        .navbar .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 2rem;
+        }
+        .container {
+            max-width: 900px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+        .header {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        .header h1 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+        .header p {
+            color: #666;
+            margin: 0;
+        }
+        .analysis-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        #user-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-family: 'Courier New', monospace;
+        }
+        #submit-btn {
+            background: #3498db;
+            color: white;
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        #submit-btn:hover {
+            background: #2980b9;
+        }
+        #loading {
+            display: none;
+            text-align: center;
+            padding: 1rem;
+            color: #3498db;
+        }
+        #result {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-radius: 4px;
+            display: none;
+        }
+        .result-benign {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .result-malicious {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .result-suspicious {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+        }
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/" class="logo">DeepWAF</a>
+        <div class="nav-links">
+            <a href="/home">Analysis Console</a>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/model">Model</a>
+            <a href="/about">About</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>HTTP Request Analysis Console</h1>
+            <p>Enter HTTP request payload for hybrid detection analysis using signature matching and Character-Level CNN.</p>
+            <p style="background: #e8f5e9; padding: 10px; border-radius: 4px; margin-top: 10px;">
+                <strong>🛡️ Level-2 Protection Active:</strong> DeepWAF is running as a reverse proxy. 
+                Access protected site at: <a href="/protected" target="_blank" style="color: #27ae60; font-weight: bold;">/protected</a>
+            </p>
+        </div>
+
+        <div class="analysis-box">
+            <div class="input-group">
+                <label for="user-input">HTTP Request Payload:</label>
+                <input type="text" 
+                       id="user-input" 
+                       placeholder="Example: ' OR '1'='1 or <script>alert(1)</script>"
+                       autocomplete="off">
+            </div>
+            
+            <button id="submit-btn">Analyze Request</button>
+            
+            <div style="margin-top: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 4px;">
+                <strong>Test Examples:</strong>
+                <div style="margin-top: 0.5rem; font-size: 0.9rem;">
+                    <button onclick="document.getElementById('user-input').value=\"' OR '1'='1\"" style="margin: 0.25rem; padding: 0.5rem; background: #e74c3c; color: white; border: none; border-radius: 3px; cursor: pointer;">SQL Injection</button>
+                    <button onclick="document.getElementById('user-input').value='<script>alert(1)</script>'" style="margin: 0.25rem; padding: 0.5rem; background: #e74c3c; color: white; border: none; border-radius: 3px; cursor: pointer;">XSS Attack</button>
+                    <button onclick="document.getElementById('user-input').value='%27%20OR%20%271%27%3D%271'" style="margin: 0.25rem; padding: 0.5rem; background: #f39c12; color: white; border: none; border-radius: 3px; cursor: pointer;">Obfuscated</button>
+                    <button onclick="document.getElementById('user-input').value='GET /products?id=123'" style="margin: 0.25rem; padding: 0.5rem; background: #27ae60; color: white; border: none; border-radius: 3px; cursor: pointer;">Benign Request</button>
+                </div>
+            </div>
+            
+            <div id="loading">
+                <p>Analyzing request...</p>
+            </div>
+            
+            <div id="result"></div>
+        </div>
+    </div>
+
+    <footer>
+        <p>DeepWAF - Character-Level CNN Web Application Firewall</p>
+        <p>Final Year Project | Computer Science Engineering | 2026</p>
+    </footer>
+
+    <script>
+        document.getElementById("submit-btn").addEventListener("click", function () {
+            let userInput = document.getElementById("user-input").value.trim();
+            let resultDiv = document.getElementById("result");
+
+            // Validate input
+            if (!userInput) {
+                resultDiv.style.display = "block";
+                resultDiv.className = "result-malicious";
+                resultDiv.innerHTML = `<strong>Error:</strong> Please enter an HTTP request payload`;
+                return;
+            }
+
+            document.getElementById("loading").style.display = "block";
+            resultDiv.style.display = "none";
+
+            fetch("/check_request", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ user_request: userInput })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("loading").style.display = "none";
+                resultDiv.style.display = "block";
+
+                if (data.status === "malicious") {
+                    resultDiv.className = "result-malicious";
+                    resultDiv.innerHTML = `<strong>Status:</strong> Malicious<br><strong>Detection Method:</strong> Signature-based pattern matching<br><strong>Action:</strong> Request blocked<br><strong>Threat Type:</strong> Known attack pattern detected`;
+                } 
+                else if (data.status === "obfuscated") {
+                    resultDiv.className = "result-suspicious";
+                    resultDiv.innerHTML = `<strong>Status:</strong> Suspicious (Obfuscated)<br><strong>Detection Method:</strong> Character-Level CNN Analysis<br><strong>CNN Verdict:</strong> ${data.ml_verdict}<br><strong>Action:</strong> ${data.ml_verdict.includes('Blocked') ? 'Request blocked' : 'Request allowed'}`;
+                } 
+                else {
+                    resultDiv.className = "result-benign";
+                    resultDiv.innerHTML = `<strong>Status:</strong> Benign<br><strong>Detection Method:</strong> Signature validation<br><strong>Action:</strong> Request allowed<br><strong>Result:</strong> No threats detected`;
+                }
+            })
+            .catch(error => {
+                document.getElementById("loading").style.display = "none";
+                resultDiv.style.display = "block";
+                resultDiv.className = "result-malicious";
+                resultDiv.innerHTML = `<strong>Error:</strong> Unable to process request`;
+            });
+        });
+    </script>
+</body>
+</html>

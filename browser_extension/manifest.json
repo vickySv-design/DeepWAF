@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "DeepWAF Browser Protection",
+  "version": "1.0",
+  "description": "Real-time web protection using Character-Level CNN",
+  "permissions": ["storage", "webNavigation", "tabs"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
